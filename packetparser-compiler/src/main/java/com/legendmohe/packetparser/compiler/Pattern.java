@@ -1,5 +1,7 @@
 package com.legendmohe.packetparser.compiler;
 
+import java.nio.ByteOrder;
+
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 
@@ -70,6 +72,13 @@ class Pattern {
 
     public String getOpt() {
         return opt;
+    }
+
+    public String getEndian() {
+        if(opt != null && opt.contains("<")){
+            return "LITTLE_ENDIAN";
+        }
+        return "BIG_ENDIAN";
     }
 
     public boolean shouldIgnore(Element element) {

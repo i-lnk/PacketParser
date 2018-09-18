@@ -45,7 +45,9 @@ import javax.tools.Diagnostic;
 public class PacketParserProcessor extends AbstractProcessor {
 
     private static final String PARSER_CLASS_SUFFIX = "PacketParser";
-    private static final Set<Character> gOptionChars = new HashSet<>(Arrays.asList('~'));
+    // '>' is for big-endian
+    // '<' is for little-endian
+    private static final Set<Character> gOptionChars = new HashSet<>(Arrays.asList('~','>','<'));
     private Elements mElementUtils;
     private Types mTypeUtils;
     private Filer mFiler;
@@ -484,7 +486,9 @@ public class PacketParserProcessor extends AbstractProcessor {
             parseMethod.beginControlFlow("if(" + condition + ")");
         }
 
-        String byteBufferString = pattern.shouldIgnore(fieldNameSet.get(attr)) ? "byteBuffer.slice()" : "byteBuffer";
+
+        String byteBufferOrder = ".order(java.nio.ByteOrder." + pattern.getEndian() + ")";
+        String byteBufferString = pattern.shouldIgnore(fieldNameSet.get(attr)) ? "byteBuffer.slice()" : "byteBuffer" + byteBufferOrder;
         String assignString = pattern.hasSetRepeat() ? ".add(" : " = ";
         String encloseString = pattern.hasSetRepeat() ? ")" : "";
         Element fieldElement = fieldNameSet.get(attr);
