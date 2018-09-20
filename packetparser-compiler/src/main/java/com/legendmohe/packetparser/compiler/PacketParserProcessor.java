@@ -594,18 +594,20 @@ public class PacketParserProcessor extends AbstractProcessor {
                 fieldKind = TypeKind.ARRAY;
             }
         }
+
+        String byteBufferOrder = ".order(java.nio.ByteOrder." + pattern.getEndian() + ")";
         switch (fieldKind) {
             case BYTE:
                 toBytesMethod.addStatement("byteBuffer.put(" + attrString + ")");
                 break;
             case SHORT:
-                toBytesMethod.addStatement("byteBuffer.putShort(" + attrString + ")");
+                toBytesMethod.addStatement("byteBuffer"+ byteBufferOrder +".putShort(" + attrString + ")");
                 break;
             case INT:
-                toBytesMethod.addStatement("byteBuffer.putInt(" + attrString + ")");
+                toBytesMethod.addStatement("byteBuffer"+ byteBufferOrder +".putInt(" + attrString + ")");
                 break;
             case LONG:
-                toBytesMethod.addStatement("byteBuffer.putLong(" + attrString + ")");
+                toBytesMethod.addStatement("byteBuffer"+ byteBufferOrder +".putLong(" + attrString + ")");
                 break;
             case CHAR:
                 toBytesMethod.addStatement("byteBuffer.putChar(" + attrString + ")");
